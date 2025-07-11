@@ -1,50 +1,93 @@
 {
   "@context": {
-    "eof": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#",
-    "schema": "http://schema.org/",
-    "dct": "http://purl.org/dc/terms/",
+    "id": "@id",
+    "type": "@type",
+
+    "eof": "https://w3id.org/eof#",
     "dcat": "http://www.w3.org/ns/dcat#",
-    "xsd": "http://www.w3.org/2001/XMLSchema#",
- 
-    "eof:Service": { "@id": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#Service" },
-    "eof:DataPortfolio": { "@id": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#DataPortfolio" },
-    "eof:Dataset": { "@id": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#Dataset" },
- 
-    "eof:hasDataOffer": {
-      "@id": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#hasDataOffer",
+    "dct": "http://purl.org/dc/terms/",
+    "schema": "https://schema.org/",
+
+    "Service": "eof:Service",
+    "DataPortfolio": "eof:DataPortfolio",
+    "Dataset": "eof:Dataset",
+
+    "name": "schema:name",
+    "description": "schema:description",
+    "version": "schema:version",
+
+    "serviceType": "eof:serviceType",
+    "serviceCategory": "eof:serviceCategory",
+    "endpoint": {
+      "@id": "eof:endpoint",
       "@type": "@id"
     },
-    "eof:includesDataset": {
-      "@id": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#includesDataset",
+    "documentation": {
+      "@id": "eof:documentation",
       "@type": "@id"
     },
-    "eof:dependsOnDataset": {
-      "@id": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#dependsOnDataset",
+    "tags": "eof:tags",
+    "organization": {
+      "@id": "eof:organization",
       "@type": "@id"
     },
-    "eof:retrievedFrom": {
-      "@id": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#retrievedFrom",
+    "hasDataOffer": {
+      "@id": "eof:hasDataOffer",
       "@type": "@id"
     },
-    "eof:organization": {
-      "@id": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#organization",
+    "hasInterface": {
+      "@id": "eof:hasInterface",
       "@type": "@id"
     },
-    "eof:endpoint": {
-      "@id": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#endpoint",
-      "@type": "xsd:anyURI"
+
+    "createdAt": {
+      "@id": "dct:created",
+      "@type": "http://www.w3.org/2001/XMLSchema#dateTime"
     },
-    "eof:documentation": {
-      "@id": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#documentation",
-      "@type": "xsd:anyURI"
+    "modifiedAt": {
+      "@id": "dct:modified",
+      "@type": "http://www.w3.org/2001/XMLSchema#dateTime"
     },
-    "eof:tags": {
-      "@id": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#tags",
-      "@container": "@set"
+
+    "document": {
+      "@id": "eof:document",
+      "@type": "@id"
     },
-    "eof:version": {
-      "@id": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#version",
-      "@type": "xsd:string"
+    "timeAvailability": "eof:timeAvailability",
+    "listsProgram": {
+      "@id": "eof:listsProgram",
+      "@type": "@id"
+    },
+    "includesDataset": {
+      "@id": "eof:includesDataset",
+      "@type": "@id"
+    },
+
+    "identifier": "dct:identifier",
+    "creator": {
+      "@id": "dct:creator",
+      "@type": "@id"
+    },
+    "issued": {
+      "@id": "dct:issued",
+      "@type": "http://www.w3.org/2001/XMLSchema#dateTime"
+    },
+    "temporal": "dct:temporal",
+    "spatial": "dct:spatial",
+    "language": "dct:language",
+    "license": {
+      "@id": "schema:license",
+      "@type": "@id"
+    },
+    "theme": "dcat:theme",
+    "keyword": "dcat:keyword",
+    "dependsOnDataset": {
+      "@id": "eof:dependsOnDataset",
+      "@type": "@id"
+    },
+    "retrievedFrom": {
+      "@id": "eof:retrievedFrom",
+      "@type": "@id"
     }
   }
 }
