@@ -1,0 +1,62 @@
+{
+  "@context": [
+    "https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld",
+    "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/context.jsonld"
+  ],
+  "id": "urn:ngsi-ld:Service:Sentinel1Production",
+  "type": "eof:Service",
+  "schema:name": {
+    "type": "Property",
+    "value": "Sentinel-1 Production Service"
+  },
+  "schema:description": {
+    "type": "Property",
+    "value": "Automated generation of Sentinel-1 Level-1 and Level-2 radar products."
+  },
+  "schema:version": {
+    "type": "Property",
+    "value": "1.2.0"
+  },
+  "eof:serviceType": {
+    "type": "Property",
+    "value": "Foundation"
+  },
+  "eof:serviceCategory": {
+    "type": "Property",
+    "value": "Data processing"
+  },
+  "eof:endpoint": {
+    "type": "Property",
+    "value": "https://eo.esa.int/api/s1-processing"
+  },
+  "eof:documentation": {
+    "type": "Property",
+    "value": "https://eo.esa.int/docs/s1-processing"
+  },
+  "eof:tags": {
+    "type": "Property",
+    "value": ["Sentinel-1", "SAR", "L1", "L2", "ESA"]
+  },
+  "eof:organization": {
+    "type": "Relationship",
+    "object": "urn:ngsi-ld:Organization:ESA"
+  },
+  "eof:hasDataOffer": {
+    "type": "Relationship",
+    "object": "urn:ngsi-ld:DataPortfolio:S1RadarPortfolio"
+  },
+  "dct:created": {
+    "type": "Property",
+    "value": {
+      "@type": "DateTime",
+      "@value": "2024-06-01T00:00:00Z"
+    }
+  },
+  "dct:modified": {
+    "type": "Property",
+    "value": {
+      "@type": "DateTime",
+      "@value": "2025-07-01T00:00:00Z"
+    }
+  }
+}
