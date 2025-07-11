@@ -1,0 +1,79 @@
+@prefix eof: <https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix schema: <https://schema.org/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+
+eof:Service a owl:Class ;
+    rdfs:label "Service" ;
+    rdfs:comment "Class representing Service in the Earth Observation Framework." .
+
+eof:DataPortfolio a owl:Class ;
+    rdfs:label "DataPortfolio" ;
+    rdfs:comment "Class representing DataPortfolio in the Earth Observation Framework." .
+
+eof:Dataset a owl:Class ;
+    rdfs:label "Dataset" ;
+    rdfs:comment "Class representing Dataset in the Earth Observation Framework." .
+
+eof:serviceType a owl:DatatypeProperty ;
+    rdfs:label "serviceType" ;
+    rdfs:comment "Property serviceType used in EOF ontology." .
+
+eof:serviceCategory a owl:DatatypeProperty ;
+    rdfs:label "serviceCategory" ;
+    rdfs:comment "Property serviceCategory used in EOF ontology." .
+
+eof:endpoint a owl:DatatypeProperty ;
+    rdfs:label "endpoint" ;
+    rdfs:comment "Property endpoint used in EOF ontology." .
+
+eof:documentation a owl:DatatypeProperty ;
+    rdfs:label "documentation" ;
+    rdfs:comment "Property documentation used in EOF ontology." .
+
+eof:tags a owl:DatatypeProperty ;
+    rdfs:label "tags" ;
+    rdfs:comment "Property tags used in EOF ontology." .
+
+eof:organization a owl:ObjectProperty ;
+    rdfs:label "organization" ;
+    rdfs:comment "Property organization used in EOF ontology." .
+
+eof:hasDataOffer a owl:ObjectProperty ;
+    rdfs:label "hasDataOffer" ;
+    rdfs:comment "Property hasDataOffer used in EOF ontology." .
+
+eof:hasInterface a owl:ObjectProperty ;
+    rdfs:label "hasInterface" ;
+    rdfs:comment "Property hasInterface used in EOF ontology." .
+
+eof:document a owl:DatatypeProperty ;
+    rdfs:label "document" ;
+    rdfs:comment "Property document used in EOF ontology." .
+
+eof:version a owl:DatatypeProperty ;
+    rdfs:label "version" ;
+    rdfs:comment "Property version used in EOF ontology." .
+
+eof:timeAvailability a owl:DatatypeProperty ;
+    rdfs:label "timeAvailability" ;
+    rdfs:comment "Property timeAvailability used in EOF ontology." .
+
+eof:listsProgram a owl:ObjectProperty ;
+    rdfs:label "listsProgram" ;
+    rdfs:comment "Property listsProgram used in EOF ontology." .
+
+eof:includesDataset a owl:ObjectProperty ;
+    rdfs:label "includesDataset" ;
+    rdfs:comment "Property includesDataset used in EOF ontology." .
+
+eof:dependsOnDataset a owl:ObjectProperty ;
+    rdfs:label "dependsOnDataset" ;
+    rdfs:comment "Property dependsOnDataset used in EOF ontology." .
+
+eof:retrievedFrom a owl:ObjectProperty ;
+    rdfs:label "retrievedFrom" ;
+    rdfs:comment "Property retrievedFrom used in EOF ontology." .
