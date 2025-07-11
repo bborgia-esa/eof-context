@@ -1,27 +1,50 @@
 {
   "@context": {
     "eof": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#",
-    "schema": "https://schema.org/",
+    "schema": "http://schema.org/",
     "dct": "http://purl.org/dc/terms/",
     "dcat": "http://www.w3.org/ns/dcat#",
     "xsd": "http://www.w3.org/2001/XMLSchema#",
-    "eof:Service": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#Service",
-    "eof:DataPortfolio": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#DataPortfolio",
-    "eof:Dataset": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#Dataset",
-    "eof:serviceType": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#serviceType",
-    "eof:serviceCategory": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#serviceCategory",
-    "eof:endpoint": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#endpoint",
-    "eof:documentation": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#documentation",
-    "eof:tags": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#tags",
-    "eof:organization": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#organization",
-    "eof:hasDataOffer": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#hasDataOffer",
-    "eof:hasInterface": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#hasInterface",
-    "eof:document": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#document",
-    "eof:version": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#version",
-    "eof:timeAvailability": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#timeAvailability",
-    "eof:listsProgram": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#listsProgram",
-    "eof:includesDataset": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#includesDataset",
-    "eof:dependsOnDataset": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#dependsOnDataset",
-    "eof:retrievedFrom": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#retrievedFrom"
+ 
+    "eof:Service": { "@id": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#Service" },
+    "eof:DataPortfolio": { "@id": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#DataPortfolio" },
+    "eof:Dataset": { "@id": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#Dataset" },
+ 
+    "eof:hasDataOffer": {
+      "@id": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#hasDataOffer",
+      "@type": "@id"
+    },
+    "eof:includesDataset": {
+      "@id": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#includesDataset",
+      "@type": "@id"
+    },
+    "eof:dependsOnDataset": {
+      "@id": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#dependsOnDataset",
+      "@type": "@id"
+    },
+    "eof:retrievedFrom": {
+      "@id": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#retrievedFrom",
+      "@type": "@id"
+    },
+    "eof:organization": {
+      "@id": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#organization",
+      "@type": "@id"
+    },
+    "eof:endpoint": {
+      "@id": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#endpoint",
+      "@type": "xsd:anyURI"
+    },
+    "eof:documentation": {
+      "@id": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#documentation",
+      "@type": "xsd:anyURI"
+    },
+    "eof:tags": {
+      "@id": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#tags",
+      "@container": "@set"
+    },
+    "eof:version": {
+      "@id": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#version",
+      "@type": "xsd:string"
+    }
   }
 }
