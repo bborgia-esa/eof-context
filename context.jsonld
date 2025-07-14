@@ -6,7 +6,6 @@
     "schema": "https://schema.org/",
     "dct": "http://purl.org/dc/terms/",
     "dcat": "http://www.w3.org/ns/dcat#",
-    "eof": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#",
 
     "schema:name": "schema:name",
     "schema:description": "schema:description",
