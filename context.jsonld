@@ -1,92 +1,26 @@
 {
-  "@context": {
-    "id": "@id",
+    "@context": {
     "type": "@type",
-
-    "eof": "https://w3id.org/eof#",
-    "dcat": "http://www.w3.org/ns/dcat#",
-    "dct": "http://purl.org/dc/terms/",
-    "schema": "https://schema.org/",
-
-    "Service": "eof:Service",
-    "DataPortfolio": "eof:DataPortfolio",
-    "Dataset": "eof:Dataset",
-
-    "name": "schema:name",
-    "description": "schema:description",
-    "version": "schema:version",
-
-    "serviceType": "eof:serviceType",
-    "serviceCategory": "eof:serviceCategory",
-    "endpoint": {
-      "@id": "eof:endpoint",
-      "@type": "@id"
+    "id": "@id",
+    "name": "https://schema.org/name",
+    "serviceType": {
+      "@id": "http://www.esa.int/efs/ontology#serviceType",
+      "@type": "https://www.w3.org/2001/XMLSchema#string"
     },
-    "documentation": {
-      "@id": "eof:documentation",
-      "@type": "@id"
-    },
-    "tags": "eof:tags",
-    "organization": {
-      "@id": "eof:organization",
-      "@type": "@id"
-    },
-    "hasDataOffer": {
-      "@id": "eof:hasDataOffer",
-      "@type": "@id"
-    },
-    "hasInterface": {
-      "@id": "eof:hasInterface",
-      "@type": "@id"
-    },
-
-    "createdAt": {
-      "@id": "dct:created",
-      "@type": "http://www.w3.org/2001/XMLSchema#dateTime"
-    },
-    "modifiedAt": {
-      "@id": "dct:modified",
-      "@type": "http://www.w3.org/2001/XMLSchema#dateTime"
-    },
-
-    "document": {
-      "@id": "eof:document",
-      "@type": "@id"
-    },
-    "timeAvailability": "eof:timeAvailability",
-    "listsProgram": {
-      "@id": "eof:listsProgram",
+    "dependsOnDataset": {
+      "@id": "http://www.esa.int/efs/ontology#dependsOnDataset",
       "@type": "@id"
     },
     "includesDataset": {
-      "@id": "eof:includesDataset",
+      "@id": "http://www.esa.int/efs/ontology#includesDataset",
       "@type": "@id"
     },
-
-    "identifier": "dct:identifier",
-    "creator": {
-      "@id": "dct:creator",
-      "@type": "@id"
-    },
-    "issued": {
-      "@id": "dct:issued",
-      "@type": "http://www.w3.org/2001/XMLSchema#dateTime"
-    },
-    "temporal": "dct:temporal",
-    "spatial": "dct:spatial",
-    "language": "dct:language",
-    "license": {
-      "@id": "schema:license",
-      "@type": "@id"
-    },
-    "theme": "dcat:theme",
-    "keyword": "dcat:keyword",
-    "dependsOnDataset": {
-      "@id": "eof:dependsOnDataset",
+    "hasDataOffer": {
+      "@id": "http://www.esa.int/efs/ontology#hasDataOffer",
       "@type": "@id"
     },
     "retrievedFrom": {
-      "@id": "eof:retrievedFrom",
+      "@id": "http://www.esa.int/efs/ontology#retrievedFrom",
       "@type": "@id"
     }
   }
