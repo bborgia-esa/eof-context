@@ -56,7 +56,7 @@
       "@type": "@id"
     },
     "eof:dependsOnDataset": {
-      "@id": "eof:dependsOnDataset",
+      "@id": "https://w3id.org/eof#dependsOnDataset",
       "@type": "@id"
     },
     "eof:retrievedFrom": {
