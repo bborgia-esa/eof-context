@@ -1,26 +1,72 @@
 {
-    "@context": {
-    "type": "@type",
+  "@context": {
     "id": "@id",
-    "name": "https://schema.org/name",
-    "serviceType": {
-      "@id": "http://www.esa.int/efs/ontology#serviceType",
-      "@type": "https://www.w3.org/2001/XMLSchema#string"
+    "type": "@type",
+
+    "schema": "https://schema.org/",
+    "dct": "http://purl.org/dc/terms/",
+    "dcat": "http://www.w3.org/ns/dcat#",
+    "eof": "https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#",
+
+    "schema:name": "schema:name",
+    "schema:description": "schema:description",
+    "schema:version": "schema:version",
+    "schema:license": "schema:license",
+
+    "dct:created": {
+      "@id": "dct:created",
+      "@type": "DateTime"
     },
-    "dependsOnDataset": {
-      "@id": "http://www.esa.int/efs/ontology#dependsOnDataset",
+    "dct:modified": {
+      "@id": "dct:modified",
+      "@type": "DateTime"
+    },
+    "dct:identifier": "dct:identifier",
+    "dct:creator": {
+      "@id": "dct:creator",
       "@type": "@id"
     },
-    "includesDataset": {
-      "@id": "http://www.esa.int/efs/ontology#includesDataset",
+    "dct:issued": {
+      "@id": "dct:issued",
+      "@type": "DateTime"
+    },
+    "dct:temporal": "dct:temporal",
+    "dct:spatial": "dct:spatial",
+    "dct:language": "dct:language",
+
+    "dcat:theme": "dcat:theme",
+    "dcat:keyword": "dcat:keyword",
+
+    "eof:serviceType": "eof:serviceType",
+    "eof:serviceCategory": "eof:serviceCategory",
+    "eof:endpoint": "eof:endpoint",
+    "eof:documentation": "eof:documentation",
+    "eof:tags": "eof:tags",
+    "eof:organization": {
+      "@id": "eof:organization",
       "@type": "@id"
     },
-    "hasDataOffer": {
-      "@id": "http://www.esa.int/efs/ontology#hasDataOffer",
+    "eof:hasDataOffer": {
+      "@id": "eof:hasDataOffer",
       "@type": "@id"
     },
-    "retrievedFrom": {
-      "@id": "http://www.esa.int/efs/ontology#retrievedFrom",
+    "eof:includesDataset": {
+      "@id": "eof:includesDataset",
+      "@type": "@id"
+    },
+    "eof:dependsOnDataset": {
+      "@id": "eof:dependsOnDataset",
+      "@type": "@id"
+    },
+    "eof:retrievedFrom": {
+      "@id": "eof:retrievedFrom",
+      "@type": "@id"
+    },
+    "eof:document": "eof:document",
+    "eof:version": "eof:version",
+    "eof:timeAvailability": "eof:timeAvailability",
+    "eof:listsProgram": {
+      "@id": "eof:listsProgram",
       "@type": "@id"
     }
   }
