@@ -26,6 +26,7 @@
       "@id": "dct:creator",
       "@type": "@id"
     },
+    "dct:issued":"dct:issued",
     "dct:issued": {
       "@id": "dct:issued",
       "@type": "DateTime"
