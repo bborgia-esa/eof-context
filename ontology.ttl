@@ -2,20 +2,26 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix schema: <https://schema.org/> .
 
 ### CLASS DEFINITIONS
 
 eof:Service a owl:Class ;
     rdfs:label "Service" ;
-    rdfs:comment "A digital function provided in the Earth Observation Framework (EOF)." .
+    rdfs:comment "A digital function provided in the Earth Observation Framework (EOF)." ;
+    rdfs:subClassOf dcat:DataService .
 
 eof:DataPortfolio a owl:Class ;
     rdfs:label "Data Portfolio" ;
-    rdfs:comment "A group of datasets offered by an EOF service." .
+    rdfs:comment "A group of datasets offered by an EOF service." ;
+    rdfs:subClassOf dcat:DatasetSeries .
 
 eof:Dataset a owl:Class ;
     rdfs:label "Dataset" ;
-    rdfs:comment "A dataset provided or used by a service, either as product or auxiliary data." .
+    rdfs:comment "A dataset provided or used by a service, either as product or auxiliary data." ;
+    rdfs:subClassOf dcat:Dataset .
 
 eof:Organization a owl:Class ;
     rdfs:label "Organization" ;
@@ -28,7 +34,6 @@ eof:Program a owl:Class ;
 eof:ServiceInterface a owl:Class ;
     rdfs:label "Service Interface" ;
     rdfs:comment "A technical interface exposed by a service, e.g., API, GUI, OGC service." .
-
 
 ### PROPERTY DEFINITIONS (with domain and range)
 
@@ -54,7 +59,8 @@ eof:documentation a owl:DatatypeProperty ;
     rdfs:label "documentation" ;
     rdfs:comment "Link to the user or technical documentation." ;
     rdfs:domain eof:Service ;
-    rdfs:range xsd:anyURI .
+    rdfs:range xsd:anyURI ;
+    owl:equivalentProperty dcat:landingPage .
 
 eof:tags a owl:DatatypeProperty ;
     rdfs:label "tags" ;
@@ -66,13 +72,15 @@ eof:organization a owl:ObjectProperty ;
     rdfs:label "organization" ;
     rdfs:comment "The organization responsible for the service." ;
     rdfs:domain eof:Service ;
-    rdfs:range eof:Organization .
+    rdfs:range eof:Organization ;
+    owl:equivalentProperty schema:provider .
 
 eof:hasDataOffer a owl:ObjectProperty ;
     rdfs:label "hasDataOffer" ;
     rdfs:comment "The data portfolio offered by this service." ;
     rdfs:domain eof:Service ;
-    rdfs:range eof:DataPortfolio .
+    rdfs:range eof:DataPortfolio ;
+    owl:equivalentProperty dcat:servesDataset .
 
 eof:hasInterface a owl:ObjectProperty ;
     rdfs:label "hasInterface" ;
