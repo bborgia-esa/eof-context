@@ -2,78 +2,122 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
-@prefix dct: <http://purl.org/dc/terms/> .
-@prefix schema: <https://schema.org/> .
-@prefix dcat: <http://www.w3.org/ns/dcat#> .
+
+### CLASS DEFINITIONS
 
 eof:Service a owl:Class ;
     rdfs:label "Service" ;
-    rdfs:comment "Class representing Service in the Earth Observation Framework." .
+    rdfs:comment "A digital function provided in the Earth Observation Framework (EOF)." .
 
 eof:DataPortfolio a owl:Class ;
-    rdfs:label "DataPortfolio" ;
-    rdfs:comment "Class representing DataPortfolio in the Earth Observation Framework." .
+    rdfs:label "Data Portfolio" ;
+    rdfs:comment "A group of datasets offered by an EOF service." .
 
 eof:Dataset a owl:Class ;
     rdfs:label "Dataset" ;
-    rdfs:comment "Class representing Dataset in the Earth Observation Framework." .
+    rdfs:comment "A dataset provided or used by a service, either as product or auxiliary data." .
+
+eof:Organization a owl:Class ;
+    rdfs:label "Organization" ;
+    rdfs:comment "An entity responsible for providing a service or dataset." .
+
+eof:Program a owl:Class ;
+    rdfs:label "Program" ;
+    rdfs:comment "An EO program under which data is generated, such as Copernicus or DestinE." .
+
+eof:ServiceInterface a owl:Class ;
+    rdfs:label "Service Interface" ;
+    rdfs:comment "A technical interface exposed by a service, e.g., API, GUI, OGC service." .
+
+
+### PROPERTY DEFINITIONS (with domain and range)
 
 eof:serviceType a owl:DatatypeProperty ;
     rdfs:label "serviceType" ;
-    rdfs:comment "Property serviceType used in EOF ontology." .
+    rdfs:comment "Type of service, such as Foundation or Value-Added." ;
+    rdfs:domain eof:Service ;
+    rdfs:range xsd:string .
 
 eof:serviceCategory a owl:DatatypeProperty ;
     rdfs:label "serviceCategory" ;
-    rdfs:comment "Property serviceCategory used in EOF ontology." .
+    rdfs:comment "Describes the functional category of the service, e.g., processing, catalog." ;
+    rdfs:domain eof:Service ;
+    rdfs:range xsd:string .
 
 eof:endpoint a owl:DatatypeProperty ;
     rdfs:label "endpoint" ;
-    rdfs:comment "Property endpoint used in EOF ontology." .
+    rdfs:comment "Main access URL of the service (API, GUI, etc.)." ;
+    rdfs:domain eof:Service ;
+    rdfs:range xsd:anyURI .
 
 eof:documentation a owl:DatatypeProperty ;
     rdfs:label "documentation" ;
-    rdfs:comment "Property documentation used in EOF ontology." .
+    rdfs:comment "Link to the user or technical documentation." ;
+    rdfs:domain eof:Service ;
+    rdfs:range xsd:anyURI .
 
 eof:tags a owl:DatatypeProperty ;
     rdfs:label "tags" ;
-    rdfs:comment "Property tags used in EOF ontology." .
+    rdfs:comment "Tags or keywords associated with the service for discovery." ;
+    rdfs:domain eof:Service ;
+    rdfs:range xsd:string .
 
 eof:organization a owl:ObjectProperty ;
     rdfs:label "organization" ;
-    rdfs:comment "Property organization used in EOF ontology." .
+    rdfs:comment "The organization responsible for the service." ;
+    rdfs:domain eof:Service ;
+    rdfs:range eof:Organization .
 
 eof:hasDataOffer a owl:ObjectProperty ;
     rdfs:label "hasDataOffer" ;
-    rdfs:comment "Property hasDataOffer used in EOF ontology." .
+    rdfs:comment "The data portfolio offered by this service." ;
+    rdfs:domain eof:Service ;
+    rdfs:range eof:DataPortfolio .
 
 eof:hasInterface a owl:ObjectProperty ;
     rdfs:label "hasInterface" ;
-    rdfs:comment "Property hasInterface used in EOF ontology." .
+    rdfs:comment "Technical interfaces exposed by the service." ;
+    rdfs:domain eof:Service ;
+    rdfs:range eof:ServiceInterface .
 
 eof:document a owl:DatatypeProperty ;
     rdfs:label "document" ;
-    rdfs:comment "Property document used in EOF ontology." .
+    rdfs:comment "Reference to documentation about the data portfolio." ;
+    rdfs:domain eof:DataPortfolio ;
+    rdfs:range xsd:anyURI .
 
 eof:version a owl:DatatypeProperty ;
     rdfs:label "version" ;
-    rdfs:comment "Property version used in EOF ontology." .
+    rdfs:comment "Version of the data portfolio." ;
+    rdfs:domain eof:DataPortfolio ;
+    rdfs:range xsd:string .
 
 eof:timeAvailability a owl:DatatypeProperty ;
     rdfs:label "timeAvailability" ;
-    rdfs:comment "Property timeAvailability used in EOF ontology." .
+    rdfs:comment "Time range covered by the data in the portfolio." ;
+    rdfs:domain eof:DataPortfolio ;
+    rdfs:range xsd:string .
 
 eof:listsProgram a owl:ObjectProperty ;
     rdfs:label "listsProgram" ;
-    rdfs:comment "Property listsProgram used in EOF ontology." .
+    rdfs:comment "Links the portfolio to the EO program(s) that generated the data." ;
+    rdfs:domain eof:DataPortfolio ;
+    rdfs:range eof:Program .
 
 eof:includesDataset a owl:ObjectProperty ;
     rdfs:label "includesDataset" ;
-    rdfs:comment "Property includesDataset used in EOF ontology." .
+    rdfs:comment "Dataset included in the data portfolio." ;
+    rdfs:domain eof:DataPortfolio ;
+    rdfs:range eof:Dataset .
 
 eof:dependsOnDataset a owl:ObjectProperty ;
     rdfs:label "dependsOnDataset" ;
-    rdfs:comment "Property dependsOnDataset used in EOF ontology." .
+    rdfs:comment "Indicates dependency on another dataset (e.g., auxiliary input)." ;
+    rdfs:domain eof:Dataset ;
+    rdfs:range eof:Dataset .
 
 eof:retrievedFrom a owl:ObjectProperty ;
     rdfs:label "retrievedFrom" ;
-    rdfs:comment "Property retrievedFrom used in EOF ontology." .
+    rdfs:comment "Source system or platform from which this dataset was retrieved." ;
+    rdfs:domain eof:Dataset ;
+    rdfs:range eof:ServiceInterface .
