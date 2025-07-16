@@ -39,7 +39,7 @@ eof:ServiceInterface a owl:Class ;
 
 eof:serviceType a owl:DatatypeProperty ;
     rdfs:label "serviceType" ;
-    rdfs:comment "Type of service, such as Foundation or Value-Added." ;
+    rdfs:comment "Type of service, such as Foundation or Value-Added or External Dependency." ;
     rdfs:domain eof:Service ;
     rdfs:range xsd:string .
 
