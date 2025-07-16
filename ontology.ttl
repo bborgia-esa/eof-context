@@ -27,10 +27,6 @@ eof:Organization a owl:Class ;
     rdfs:label "Organization" ;
     rdfs:comment "An entity responsible for providing a service or dataset." .
 
-eof:Program a owl:Class ;
-    rdfs:label "Program" ;
-    rdfs:comment "An EO program under which data is generated, such as Copernicus or DestinE." .
-
 eof:ServiceInterface a owl:Class ;
     rdfs:label "Service Interface" ;
     rdfs:comment "A technical interface exposed by a service, e.g., API, GUI, OGC service." .
@@ -105,12 +101,6 @@ eof:timeAvailability a owl:DatatypeProperty ;
     rdfs:comment "Time range covered by the data in the portfolio." ;
     rdfs:domain eof:DataPortfolio ;
     rdfs:range xsd:string .
-
-eof:listsProgram a owl:ObjectProperty ;
-    rdfs:label "listsProgram" ;
-    rdfs:comment "Links the portfolio to the EO program(s) that generated the data." ;
-    rdfs:domain eof:DataPortfolio ;
-    rdfs:range eof:Program .
 
 eof:includesDataset a owl:ObjectProperty ;
     rdfs:label "includesDataset" ;
