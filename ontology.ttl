@@ -128,4 +128,4 @@ eof:retrievedFrom a owl:ObjectProperty ;
     rdfs:label "retrievedFrom" ;
     rdfs:comment "Source system or platform from which this dataset was retrieved." ;
     rdfs:domain eof:Dataset ;
-    rdfs:range eof:ServiceInterface .
+    rdfs:range eof:Service .
