@@ -1,0 +1,327 @@
+@prefix eof: <https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix schema: <https://schema.org/> .
+@prefix : <http://example.org/instance#> .
+ 
+:Sentinel1ProductionService a eof:Service ;
+    rdfs:label "Sentinel-1 Production Service" ;
+    eof:serviceType "Foundation" ;
+    eof:serviceCategory "processing" ;
+    eof:endpoint <https://s1a-prip.copernicus.eu/odata/v1> ;
+    eof:documentation <https://sentinels.copernicus.eu/web/sentinel/user-guides/sentinel-1-sar> ;
+    eof:tags "Sentinel-1, SAR, production" ;
+    eof:organization :ESA ;
+    eof:hasDataOffer :Sentinel1DataPortfolio ;
+    eof:hasInterface :PRIP .
+
+:Sentinel3ProductionService a eof:Service ;
+    rdfs:label "Sentinel-3 Production Service" ;
+    eof:serviceType "Foundation" ;
+    eof:serviceCategory "processing" ;
+    eof:endpoint <https://s3b-prip.copernicus.eu/odata/v1> ;
+    eof:documentation <https://sentinels.copernicus.eu/web/sentinel/user-guides/sentinel-3-olci> ;
+    eof:tags "Sentinel-3, SAR, production" ;
+    eof:organization :ESA ;
+    eof:hasDataOffer :Sentinel3DataPortfolio ;
+    eof:hasInterface :PRIP .
+	
+:ADGS a eof:Service ;
+    rdfs:label "Auxiliary Data Gateway Service" ;
+    eof:serviceType "Foundation" ;
+    eof:serviceCategory "processing" ;
+    eof:endpoint <https://adgs.copernicus.eu/odata/v1> ;
+    eof:documentation  <https://to.be.defined/index.html> ;
+    eof:tags "AUX, Auxiliary" ;
+    eof:organization :ESA ;
+    eof:hasInterface :AUXIP .
+
+:ECMWF-C3S a eof:Service ;
+    rdfs:label "ECMWF Auxiliary gateway" ;
+    eof:serviceType "External Dependency" ;
+    eof:serviceCategory "processing" ;
+    eof:endpoint <https://c3s.ecmwf.eu/odata/v1> ;
+    eof:documentation <https://to.be.defined/index.html> ;
+    eof:tags "AUX, Auxiliary" ;
+    eof:organization :ECMWF ;
+    eof:hasInterface :C3S-API .
+
+:EUMETSAT-WeKEO a eof:Service ;
+    rdfs:label "EUMETSAT WeeKEO Auxiliary gateway" ;
+    eof:serviceType "External Dependency" ;
+    eof:serviceCategory "processing" ;
+    eof:endpoint <https://wekeo.eumetsat.eu/odata/v1> ;
+    eof:documentation <https://to.be.defined/index.html> ;
+    eof:tags "AUX, Auxiliary" ;
+    eof:organization :EUMETSAT ;
+    eof:hasInterface :WeeKEO-API .
+
+:ESA a eof:Organization ;
+    rdfs:label "European Space Agency (ESA)" .
+ 
+:EUMETSAT a eof:Organization ;
+    rdfs:label "European Organisation for the Exploitation of Meteorological Satellites (EUMETSAT)" .
+ 
+:ECMWF a eof:Organization ;
+    rdfs:label "European Centre for Medium-Range Weather Forecasts (ECMWF)" .
+
+:Sentinel1DataPortfolio a eof:DataPortfolio ;
+    rdfs:label "Sentinel-1 Data Portfolio" ;
+    eof:version "1.0" ;
+    eof:document <https://sentinels.copernicus.eu/documents/247904/0/Sentinel-1_Product_Specifications.pdf> ;
+    eof:timeAvailability "2014-04-03/ongoing" ;
+	eof:includesDataset
+			:S4_GRDH_1S-COG ,
+			:EW_OCN__2S ,
+			:EW_GRDH_1S-COG ,
+			:EW_GRDM_1S ,
+			:EW_RAW__0S ,
+			:CARD-COH12 ,
+			:CARD-COH6 ,
+			:EW_GRDM_1S-COG ,
+			:S1_GRDH_1S-COG ,
+			:IW_RAW__0S ,
+			:S3_GRDH_1S-COG ,
+			:S6_GRDH_1S-COG ,
+			:IW_GRDH_1S-COG ,
+			:IW_GRDH_1S ,
+			:WV_OCN__2S ,
+			:EW_GRDH_1S ,
+			:CARD-BS ,
+			:S5_GRDH_1S-COG ,
+			:IW_OCN__2S ,
+			:IW_SLC__1S .	
+
+:Sentinel3DataPortfolio a eof:DataPortfolio ;
+    rdfs:label "Sentinel-3 Data Portfolio" ;
+    eof:version "1.0" ;
+    eof:document <https://sentinels.copernicus.eu/documents/247904/0/Sentinel-3_Product_Specifications.pdf> ;
+    eof:timeAvailability "2014-04-03/ongoing" ;
+	eof:includesDataset
+			:OL_1_EFR___ ,
+			:OL_2_LFR___ ,
+			:SR_2_LAN_SI ,
+			:SR_2_LAN_HY ,
+			:SR___POE_AX ,
+			:SL_2_LST___ ,
+			:SR_2_LAN___ ,
+			:OL_2_WFR___ ,
+			:SR_1_SRA___ ,
+			:SR_2_LAN_LI ,
+			:OL_2_WRR___ ,
+			:OL_1_ERR___ ,
+			:SR_1_SRA_A_ .
+	
+:S4_GRDH_1S-COG a eof:Dataset ;
+    rdfs:label "S4_GRDH_1S-COG" ;
+    eof:dependsOnDataset :AUX_GNSSRD , :AUX_SCS , :AUX_CAL , :AUX_PP1 , :AUX_POEORB .
+
+:EW_OCN__2S a eof:Dataset ;
+    rdfs:label "EW_OCN__2S" ;
+    eof:dependsOnDataset :AUX_GNSSRD , :AUX_SCS , :AUX_PP2 , :AUX_PROQUA , :AUX_CAL , :AUX_PP1 , :AUX_POEORB .
+
+:EW_GRDH_1S-COG a eof:Dataset ;
+    rdfs:label "EW_GRDH_1S-COG" ;
+    eof:dependsOnDataset :AUX_GNSSRD , :AUX_SCS , :AUX_PP2 , :AUX_PROQUA , :AUX_CAL , :AUX_PP1 , :AUX_POEORB .
+
+:EW_GRDM_1S a eof:Dataset ;
+    rdfs:label "EW_GRDM_1S" ;
+    eof:dependsOnDataset :AUX_PP2 , :AUX_PROQUA , :AUX_CAL , :AUX_PP1 , :AUX_POEORB .
+
+:EW_RAW__0S a eof:Dataset ;
+    rdfs:label "EW_RAW__0S" ;
+    eof:dependsOnDataset :AUX_GNSSRD , :AUX_SCS , :AUX_PP2 , :AUX_PROQUA , :AUX_CAL , :AUX_PP1 , :AUX_POEORB .
+
+:CARD-COH12 a eof:Dataset ;
+    rdfs:label "CARD-COH12" ;
+    eof:dependsOnDataset :AUX_GNSSRD , :AUX_SCS , :AUX_PP2 , :AUX_PROQUA , :AUX_CAL , :AUX_PP1 , :AUX_POEORB .
+
+:CARD-COH6 a eof:Dataset ;
+    rdfs:label "CARD-COH6" ;
+    eof:dependsOnDataset :AUX_GNSSRD , :AUX_SCS , :AUX_PP2 , :AUX_PROQUA  .
+
+:EW_GRDM_1S-COG a eof:Dataset ;
+    rdfs:label "EW_GRDM_1S-COG" ;
+    eof:dependsOnDataset :AUX_GNSSRD , :AUX_SCS , :AUX_PP2 , :AUX_PROQUA , :AUX_CAL , :AUX_PP1 , :AUX_POEORB .
+
+:S1_GRDH_1S-COG a eof:Dataset ;
+    rdfs:label "S1_GRDH_1S-COG" ;
+    eof:dependsOnDataset :AUX_GNSSRD , :AUX_SCS , :AUX_PP2 , :AUX_PROQUA , :AUX_CAL , :AUX_PP1  .
+
+:IW_RAW__0S a eof:Dataset ;
+    rdfs:label "IW_RAW__0S" ;
+    eof:dependsOnDataset :AUX_GNSSRD , :AUX_SCS , :AUX_PP2 , :AUX_PROQUA , :AUX_CAL , :AUX_PP1 , :AUX_POEORB .
+
+:S3_GRDH_1S-COG a eof:Dataset ;
+    rdfs:label "S3_GRDH_1S-COG" ;
+    eof:dependsOnDataset :AUX_GNSSRD , :AUX_SCS , :AUX_PP2 , :AUX_PROQUA , :AUX_CAL , :AUX_PP1 , :AUX_POEORB .
+
+:S6_GRDH_1S-COG a eof:Dataset ;
+    rdfs:label "S6_GRDH_1S-COG" ;
+    eof:dependsOnDataset :AUX_GNSSRD , :AUX_SCS , :AUX_PROQUA , :AUX_CAL , :AUX_PP1 , :AUX_POEORB , :AuxiliaryDEM.
+
+:IW_GRDH_1S-COG a eof:Dataset ;
+    rdfs:label "IW_GRDH_1S-COG" ;
+    eof:dependsOnDataset :AUX_GNSSRD , :AUX_SCS , :AUX_PP2 , :AUX_PROQUA , :AUX_CAL , :AUX_PP1 , :AUX_POEORB .
+
+:IW_GRDH_1S a eof:Dataset ;
+    rdfs:label "IW_GRDH_1S" ;
+    eof:dependsOnDataset :AUX_GNSSRD , :AUX_SCS , :AUX_PP2 , :AUX_PROQUA , :AUX_POEORB .
+
+:WV_OCN__2S a eof:Dataset ;
+    rdfs:label "WV_OCN__2S" ;
+    eof:dependsOnDataset :AUX_GNSSRD , :AUX_SCS , :AUX_PP2 , :AUX_PROQUA , :AUX_CAL , :AUX_PP1 , :AUX_POEORB , :AuxiliaryDEM .
+
+:EW_GRDH_1S a eof:Dataset ;
+    rdfs:label "EW_GRDH_1S" ;
+    eof:dependsOnDataset :AUX_GNSSRD , :AUX_PP2 , :AUX_PROQUA , :AUX_CAL , :AUX_PP1 , :AUX_POEORB .
+
+:CARD-BS a eof:Dataset ;
+    rdfs:label "CARD-BS" ;
+    eof:dependsOnDataset :AUX_GNSSRD , :AUX_SCS , :AUX_PP2 , :AUX_PROQUA , :AUX_CAL , :AUX_PP1 , :AUX_POEORB .
+
+:S5_GRDH_1S-COG a eof:Dataset ;
+    rdfs:label "S5_GRDH_1S-COG" ;
+    eof:dependsOnDataset :AUX_GNSSRD , :AUX_SCS , :AUX_PP2 , :AUX_PROQUA , :AUX_CAL , :AUX_PP1  .
+
+:IW_OCN__2S a eof:Dataset ;
+    rdfs:label "IW_OCN__2S" ;
+    eof:dependsOnDataset :AUX_GNSSRD , :AUX_SCS , :AUX_PP2 , :AUX_PROQUA , :AUX_CAL , :AUX_PP1 , :AUX_POEORB .
+
+:IW_SLC__1S a eof:Dataset ;
+    rdfs:label "IW_SLC__1S" ;
+    eof:dependsOnDataset :AUX_GNSSRD ,  :AUX_PROQUA , :AUX_CAL , :AUX_PP1 , :AUX_POEORB .
+
+:SL_1_RBT___ a eof:Dataset ;
+    rdfs:label "SL_1_RBT___" ;
+    eof:dependsOnDataset :AUX_GNSSRD_S3 , :AUX_PRCPTF_S3 , :AUX_POEORB_S3 , :AUX_PROQUA_S3 .
+
+:OL_1_EFR___ a eof:Dataset ;
+	rdfs:label "OL_1_EFR___" ;
+    eof:dependsOnDataset :AUX_GNSSRD_S3 , :AUX_POEORB_S3 , :AUX_PROQUA_S3 .
+
+:OL_2_LFR___ a eof:Dataset ;
+	rdfs:label "OL_2_LFR___" ;
+    eof:dependsOnDataset :AUX_GNSSRD_S3 , :AUX_PRCPTF_S3 , :AUX_PROQUA_S3 .
+
+:SR_2_LAN_SI a eof:Dataset ;
+	rdfs:label "SR_2_LAN_SI" ;
+    eof:dependsOnDataset :AUX_GNSSRD_S3 , :AUX_PRCPTF_S3 , :AUX_POEORB_S3 , :AUX_PROQUA_S3 .
+
+:SR_2_LAN_HY a eof:Dataset ;
+	rdfs:label "SR_2_LAN_HY" ;
+    eof:dependsOnDataset :AUX_PRCPTF_S3 , :AUX_POEORB_S3 , :AUX_PROQUA_S3 .
+
+:SR___POE_AX a eof:Dataset ;
+	rdfs:label "SR___POE_AX" ;
+    eof:dependsOnDataset :AUX_GNSSRD_S3 , :AUX_PRCPTF_S3 , :AUX_POEORB_S3  .
+
+:SL_2_LST___ a eof:Dataset ;
+	rdfs:label "SL_2_LST___" ;
+    eof:dependsOnDataset :AUX_GNSSRD_S3 .
+
+:SR_2_LAN___ a eof:Dataset ;
+	rdfs:label "SR_2_LAN___" ;
+    eof:dependsOnDataset :AUX_GNSSRD_S3 , :AUX_PRCPTF_S3 , :AUX_POEORB_S3 , :AUX_PROQUA_S3 .
+
+:OL_2_WFR___ a eof:Dataset ;
+	rdfs:label "OL_2_WFR___" ;
+    eof:dependsOnDataset :AUX_GNSSRD_S3 , :AUX_POEORB_S3 , :AUX_PROQUA_S3 .
+
+:SR_1_SRA___ a eof:Dataset ;
+	rdfs:label "SR_1_SRA___" ;
+    eof:dependsOnDataset :AUX_GNSSRD_S3 , :AUX_PRCPTF_S3 , :AUX_POEORB_S3 , :AUX_PROQUA_S3 .
+
+:SR_2_LAN_LI a eof:Dataset ;
+	rdfs:label "SR_2_LAN_LI" ;
+    eof:dependsOnDataset :AUX_GNSSRD_S3 , :AUX_PRCPTF_S3 , :AUX_PROQUA_S3 .
+
+:OL_2_WRR___ a eof:Dataset ;
+	rdfs:label "OL_2_WRR___" ;
+    eof:dependsOnDataset :AUX_GNSSRD_S3 , :AUX_PRCPTF_S3 , :AUX_POEORB_S3 , :AUX_PROQUA_S3 .
+
+:OL_1_ERR___ a eof:Dataset ;
+	rdfs:label "OL_1_ERR___" ;
+    eof:dependsOnDataset :AUX_PRCPTF_S3 , :AUX_POEORB_S3 , :AUX_PROQUA_S3 .
+
+:SR_1_SRA_A_ a eof:Dataset ;
+	rdfs:label "SR_1_SRA_A_" ;
+    eof:dependsOnDataset :AUX_GNSSRD_S3 , :AUX_PROQUA_S3 .
+
+# AUX_GNSSRD
+:AUX_GNSSRD a eof:Dataset ;
+    rdfs:label "GNSS RD File" ;
+    eof:retrievedFrom :ECMWF-C3S, :ADGS .	
+	
+# AUX_SCS
+:AUX_SCS a eof:Dataset ;
+    rdfs:label "SCS File" ;
+    eof:retrievedFrom :ADGS .	
+	
+# AUX_PP2
+:AUX_PP2 a eof:Dataset ;
+    rdfs:label "Preprocessing Params 2" ;
+    eof:retrievedFrom :ECMWF-C3S .
+	
+# AUX_PROQUA
+:AUX_PROQUA a eof:Dataset ;
+    rdfs:label "Processing Quality AUX" ;
+    eof:retrievedFrom :ECMWF-C3S, :EUMETSAT-WeKEO, :ADGS .	
+	
+# AUX_CAL
+:AUX_CAL a eof:Dataset ;
+    rdfs:label "Calibration AUX" ;
+    eof:retrievedFrom :ECMWF-C3S, :EUMETSAT-WeKEO, :ADGS .	
+	
+# AUX_PP1
+:AUX_PP1 a eof:Dataset ;
+    rdfs:label "Preprocessing Params 1" ;
+    eof:retrievedFrom :ECMWF-C3S, :ADGS .	
+	
+# AUX_POEORB
+:AUX_POEORB a eof:Dataset ;
+    rdfs:label "Precise Orbit AUX" ;
+    eof:retrievedFrom :ECMWF-C3S .	
+ 
+# AUX_GNSSRD
+:AUX_GNSSRD_S3 a eof:Dataset  ;
+    rdfs:label "GNSS RD AUX for S3" ;
+    eof:retrievedFrom :ECMWF-C3S, :EUMETSAT-WeKEO, :ADGS .	
+
+# AUX_PRCPTF
+:AUX_PRCPTF_S3 a eof:Dataset  ;
+    rdfs:label "Precipitation AUX for S3" ;
+    eof:retrievedFrom  :ADGS .	
+
+# AUX_POEORB
+:AUX_POEORB_S3 a eof:Dataset  ;
+    rdfs:label "Precise Orbit AUX for S3" ;
+    eof:retrievedFrom :EUMETSAT-WeKEO, :ADGS .	
+
+# AUX_PROQUA
+:AUX_PROQUA_S3 a eof:Dataset  ;
+    rdfs:label "Processing Quality AUX for S3" ;
+    eof:retrievedFrom :ECMWF-C3S, :EUMETSAT-WeKEO, :ADGS .	
+	
+:AuxiliaryDEM a eof:Dataset ;
+    rdfs:label "Auxiliary Digital Elevation Model" ;
+    eof:retrievedFrom :ADGS .
+ 
+:PRIP a eof:ServiceInterface ;
+    rdfs:label "Production Interface Delivery Point" ;
+    rdfs:comment "Odata API for product access." .
+
+:AUXIP a eof:ServiceInterface ;
+    rdfs:label "Auxiliary Interface Delivery Point" ;
+    rdfs:comment "Odata API for auxiliary access." . 
+
+:C3S-API a eof:ServiceInterface ;
+    rdfs:label "ECMWF Interface" ;
+    rdfs:comment "Interface for retrieving orbital auxiliary data from ECMWF." .
+ 
+:WeeKEO-API a eof:ServiceInterface ;
+    rdfs:label "EUMETSAT Interface" ;
+    rdfs:comment "Interface for retrieving calibration auxiliary data from EUMETSAT." .
