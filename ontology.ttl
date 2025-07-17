@@ -8,10 +8,20 @@
 
 ### CLASS DEFINITIONS
 
+# Abstract base class for all service-like entities
+eof:AbstractService a owl:Class ;
+    rdfs:label "Abstract Service" ;
+    rdfs:comment "Base class for all service-like entities with common properties." .
+
 eof:Service a owl:Class ;
     rdfs:label "Service" ;
     rdfs:comment "A digital function provided in the Earth Observation Framework (EOF)." ;
-    rdfs:subClassOf dcat:DataService .
+    rdfs:subClassOf eof:AbstractService, dcat:DataService .
+
+eof:ExternalService a owl:Class ;
+    rdfs:label "External Service" ;
+    rdfs:comment "An external service or dependency used by EOF services." ;
+    rdfs:subClassOf eof:AbstractService .
 
 eof:DataPortfolio a owl:Class ;
     rdfs:label "Data Portfolio" ;
@@ -33,6 +43,27 @@ eof:ServiceInterface a owl:Class ;
 
 ### PROPERTY DEFINITIONS (with domain and range)
 
+# Common properties for all service-like entities
+eof:endpoint a owl:DatatypeProperty ;
+    rdfs:label "endpoint" ;
+    rdfs:comment "Main access URL of the service (API, GUI, etc.)." ;
+    rdfs:domain eof:AbstractService ;
+    rdfs:range xsd:anyURI .
+
+eof:tags a owl:DatatypeProperty ;
+    rdfs:label "tags" ;
+    rdfs:comment "Tags or keywords associated with the service for discovery." ;
+    rdfs:domain eof:AbstractService ;
+    rdfs:range xsd:string .
+
+eof:organization a owl:ObjectProperty ;
+    rdfs:label "organization" ;
+    rdfs:comment "The organization responsible for the service." ;
+    rdfs:domain eof:AbstractService ;
+    rdfs:range eof:Organization ;
+    owl:equivalentProperty schema:provider .
+
+# Properties specific to EOF Services
 eof:serviceType a owl:DatatypeProperty ;
     rdfs:label "serviceType" ;
     rdfs:comment "Type of service, such as Foundation or Value-Added or External Dependency." ;
@@ -45,31 +76,12 @@ eof:serviceCategory a owl:DatatypeProperty ;
     rdfs:domain eof:Service ;
     rdfs:range xsd:string .
 
-eof:endpoint a owl:DatatypeProperty ;
-    rdfs:label "endpoint" ;
-    rdfs:comment "Main access URL of the service (API, GUI, etc.)." ;
-    rdfs:domain eof:Service ;
-    rdfs:range xsd:anyURI .
-
 eof:documentation a owl:DatatypeProperty ;
     rdfs:label "documentation" ;
     rdfs:comment "Link to the user or technical documentation." ;
     rdfs:domain eof:Service ;
     rdfs:range xsd:anyURI ;
     owl:equivalentProperty dcat:landingPage .
-
-eof:tags a owl:DatatypeProperty ;
-    rdfs:label "tags" ;
-    rdfs:comment "Tags or keywords associated with the service for discovery." ;
-    rdfs:domain eof:Service ;
-    rdfs:range xsd:string .
-
-eof:organization a owl:ObjectProperty ;
-    rdfs:label "organization" ;
-    rdfs:comment "The organization responsible for the service." ;
-    rdfs:domain eof:Service ;
-    rdfs:range eof:Organization ;
-    owl:equivalentProperty schema:provider .
 
 eof:hasDataOffer a owl:ObjectProperty ;
     rdfs:label "hasDataOffer" ;
@@ -84,6 +96,14 @@ eof:hasInterface a owl:ObjectProperty ;
     rdfs:domain eof:Service ;
     rdfs:range eof:ServiceInterface .
 
+# Properties for relationships between services
+eof:dependsOnService a owl:ObjectProperty ;
+    rdfs:label "dependsOnService" ;
+    rdfs:comment "Indicates that this service depends on another service (internal or external)." ;
+    rdfs:domain eof:Service ;
+    rdfs:range eof:AbstractService .
+
+# Data Portfolio properties
 eof:document a owl:DatatypeProperty ;
     rdfs:label "document" ;
     rdfs:comment "Reference to documentation about the data portfolio." ;
@@ -107,6 +127,14 @@ eof:includesDataset a owl:ObjectProperty ;
     rdfs:comment "Dataset included in the data portfolio." ;
     rdfs:domain eof:DataPortfolio ;
     rdfs:range eof:Dataset .
+
+# Dataset properties
+eof:license a owl:ObjectProperty ;
+    rdfs:label "license" ;
+    rdfs:comment "A legal document under which the dataset is made available." ;
+    rdfs:domain eof:Dataset ;
+    rdfs:range dct:LicenseDocument ;
+    owl:equivalentProperty dct:license .
 
 eof:dependsOnDataset a owl:ObjectProperty ;
     rdfs:label "dependsOnDataset" ;
