@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Hierarchical Edge Bundling with Filters</title>
+<style>
+  body { font: 10px sans-serif; margin: 0; overflow: hidden; }
+  svg { width: 100vw; height: 100vh; }
+  .link { 
+    fill: none; 
+    stroke: #999;
+    stroke-opacity: 0.4; 
+    stroke-width: 1.5px; 
+    cursor: pointer; 
+  }
+  .link.highlight { 
+    stroke-width: 2px !important; 
+    stroke-opacity: 0.8 !important; 
+  }
+  .link.dimmed {
+    stroke-opacity: 0.1 !important;
+  }
+  .zoom-controls {
+    z-index: 1000;
+  }
+  .zoom-controls button {
+    display: block;
+    width: 80px;
+    margin: 2px 0;
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    background: white;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  .zoom-controls button:hover {
+    background: #f0f0f0;
+  }
+  .highlight-label { font-weight: bold; fill: red; }
+  .node { font: 10px sans-serif; }
+  .legend, .controls, .tooltip {
+    position: absolute;
+    background: rgba(255,255,255,0.9);
+    padding: 10px;
+    font-size: 12px;
+  }
+  .legend { top: 10px; right: 10px; }
+  .controls { top: 10px; left: 10px; z-index: 10; }
+  .tooltip {
+    display: none;
+    border: 1px solid #ccc;
+    pointer-events: none;
+  }
+  
+  /* Custom Service Dropdown Styles */
+  .custom-dropdown {
+    position: relative;
+    display: inline-block;
+    width: 200px;
+    margin-bottom: 10px;
+  }
+  
+  .dropdown-header {
+    padding: 8px 12px;
+    background: linear-gradient(135deg, #ff6b35, #ff8c42);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    width: 100%;
+    text-align: left;
+    position: relative;
+  }
+  
+  .dropdown-header:hover {
+    background: linear-gradient(135deg, #ff8c42, #ff6b35);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+  
+  .dropdown-header::after {
+    content: '▼';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: transform 0.3s ease;
+  }
+  
+  .dropdown-header.open::after {
+    transform: translateY(-50%) rotate(180deg);
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background: white;
+    min-width: 100%;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 2px;
+  }
+  
+  .dropdown-content.show {
+    display: block;
+  }
+  
+  .dropdown-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+  }
+  
+  .dropdown-item:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .dropdown-item.selected {
+    background-color: #fff5f0;
+    color: #ff6b35;
+  }
+  
+  .dropdown-item input[type="checkbox"] {
+    margin-right: 8px;
+    accent-color: #ff6b35;
+  }
+  
+  .service-count {
+    font-size: 10px;
+    color: #666;
+    margin-left: 4px;
+  }
+  
+  .clear-all {
+    padding: 6px 12px;
+    background: #f8f9fa;
+    border-top: 1px solid #eee;
+    cursor: pointer;
+    font-size: 11px;
+    color: #666;
+    text-align: center;
+    transition: background-color 0.2s ease;
+  }
+  
+  .clear-all:hover {
+    background: #e9ecef;
+  }
+  
+  .main-flex {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    top: 0;
+    left: 0;
+    z-index: 0;
+  }
+  .graph-container {
+    flex: 0 0 50vw;   /* Take up half the screen width */
+    min-width: 0;
+    position: relative;
+    background: #fff;
+    max-width: 50vw;  /* Ensure it doesn't exceed half */
+  }
+  .graph-container svg {
+    width: 100%;
+    height: 100vh;
+    display: block;
+  }
+  .table-container {
+    flex: 1 1 350px;
+    background: #fff;
+    overflow-y: auto;
+    border-left: 1px solid #eee;
+    padding: 60px 10px 20px 20px; /* Increased top padding from 20px to 40px */
+    box-sizing: border-box;
+    min-width: 320px;
+    max-width: 500px;
+  }
+  .table-container table {
+    width: 100%;
+    font-size: 13px;
+    background: #fafbfc;
+  }
+  .table-container th, .table-container td {
+    padding: 6px 8px;
+    border: 1px solid #e0e0e0;
+    text-align: left;
+  }
+  .table-container th {
+    background: #f5f5f5;
+    font-weight: bold;
+  }
+</style>
+<body>
+<div class="controls">
+  <label for="serviceFilter">Services:</label>
+  <div class="custom-dropdown">
+    <button class="dropdown-header" id="serviceDropdownHeader">
+      <span id="serviceDropdownText">Select Services</span>
+    </button>
+    <div class="dropdown-content" id="serviceDropdownContent">
+      <div class="clear-all" id="clearAllServices">Clear All</div>
+    </div>
+  </div>
+  
+  <label for="datasetFilter">Dataset:</label>
+  <select id="datasetFilter"><option>All</option></select>
+  <label for="auxFilter">Aux File:</label>
+  <select id="auxFilter"><option>All</option></select>
+  <label for="sourceFilter">Source:</label>
+  <select id="sourceFilter"><option>All</option></select>
+</div>
+<div class="legend">
+  <div><strong>Edge Colors</strong></div>
+  <div>
+    <span style="color: #ff6b35; font-weight: bold;">━━━</span>
+    <span style="color: #ff6b35; font-weight: bold;">Service</span>
+    <span style="color: #333; font-weight: bold;">→</span>
+    <span style="color: #2e8b57; font-weight: bold;">Dataset</span>
+  </div>
+  <div>
+    <span style="color: #2e8b57; font-weight: bold;">━━━</span>
+    <span style="color: #2e8b57; font-weight: bold;">Dataset</span>
+    <span style="color: #333; font-weight: bold;">→</span>
+    <span style="color: #4169e1; font-weight: bold;">AuxFile</span>
+  </div>
+  <div>
+    <span style="color: #4169e1; font-weight: bold;">━━━</span>
+    <span style="color: #4169e1; font-weight: bold;">AuxFile</span>
+    <span style="color: #333; font-weight: bold;">→</span>
+    <span style="color: #333; font-weight: bold;">Source</span>
+  </div>
+</div>
+<div class="tooltip" id="tooltip"></div>
+
+<!-- Begin main flex layout -->
+<div class="main-flex">
+  <div class="graph-container">
+    <svg></svg>
+  </div>
+  <div class="table-container">
+    <h3>Data Table</h3>
+    <table id="dataTable" border="1" style="width:100%; border-collapse:collapse;">
+      <thead>
+        <tr>
+          <th>Service</th>
+          <th>Dataset</th>
+          <th>Aux File</th>
+          <th>Source</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Filled by JS -->
+      </tbody>
+    </table>
+  </div>
+</div>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+(async () => {
+  const endpointUrl = "http://10.182.17.122:8080/esa-dataset/sparql";
+  const sparqlQuery = `
+    PREFIX eof: <https://raw.githubusercontent.com/bborgia-esa/eof-context/main/ontology.ttl#>
+    SELECT DISTINCT ?dataset ?aux ?source ?service
+    WHERE {
+      ?dataset a eof:Dataset ; eof:dependsOnDataset ?aux .
+      ?aux eof:retrievedFrom ?source .
+      OPTIONAL {
+        ?service a eof:Service ; eof:hasDataOffer ?portfolio .
+        ?portfolio eof:includesDataset ?dataset .
+      }
+    }
+  `;
+
+  let allRows = [];
+  
+  try {
+    const response = await fetch(endpointUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/sparql-query",
+        "Accept": "application/sparql-results+json"
+      },
+      body: sparqlQuery
+    });
+    const json = await response.json();
+    allRows = json.results.bindings;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    // Fallback sample data for demo
+    allRows = [
+      {
+        dataset: { value: "http://example.com/dataset1" },
+        aux: { value: "http://example.com/aux1" },
+        source: { value: "http://example.com/source1" },
+        service: { value: "http://example.com/service1" }
+      },
+      {
+        dataset: { value: "http://example.com/dataset2" },
+        aux: { value: "http://example.com/aux2" },
+        source: { value: "http://example.com/source2" },
+        service: { value: "http://example.com/service2" }
+      },
+      {
+        dataset: { value: "http://example.com/dataset3" },
+        aux: { value: "http://example.com/aux3" },
+        source: { value: "http://example.com/source3" },
+        service: { value: "http://example.com/service1" }
+      }
+    ];
+  }
+
+  function getId(uri, prefix = "") {
+    return prefix + uri.split(/[#\/]/).pop();
+  }
+
+  function renderTable(data) {
+    const tbody = document.getElementById('dataTable').querySelector('tbody');
+    tbody.innerHTML = '';
+    data.forEach(row => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${row.service ? row.service.value.split('/').pop() : ''}</td>
+        <td>${row.dataset.value.split('/').pop()}</td>
+        <td>${row.aux.value.split('/').pop()}</td>
+        <td>${row.source.value.split('/').pop()}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function renderHighlightedTable(rows) {
+    const tbody = document.getElementById('dataTable').querySelector('tbody');
+    tbody.innerHTML = '';
+    rows.forEach(row => {
+      const tr = document.createElement('tr');
+      // Remove 'instance#' prefix if present
+      const getLabel = v => {
+        if (!v) return '';
+        let label = v.split('/').pop();
+        if (label.startsWith('instance#')) label = label.replace(/^instance#/, '');
+        return label;
+      };
+      tr.innerHTML = `
+        <td>${row.service ? getLabel(row.service.value) : ''}</td>
+        <td>${getLabel(row.dataset.value)}</td>
+        <td>${getLabel(row.aux.value)}</td>
+        <td>${getLabel(row.source.value)}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function applyFilters() {
+    const dsVal = document.getElementById("datasetFilter").value;
+    const auxVal = document.getElementById("auxFilter").value;
+    const srcVal = document.getElementById("sourceFilter").value;
+    const selectedServices = Array.from(document.querySelectorAll('#serviceDropdownContent input[type="checkbox"]:checked'))
+      .map(cb => cb.value);
+
+    const filtered = allRows.filter(b => {
+      return (dsVal === "All" || getId(b.dataset.value, "dataset.") === dsVal) &&
+             (auxVal === "All" || getId(b.aux.value, "aux.") === auxVal) &&
+             (srcVal === "All" || getId(b.source.value, "source.") === srcVal) &&
+             (selectedServices.length === 0 || (b.service && selectedServices.includes(getId(b.service.value, "service."))));
+    });
+
+    renderGraph(filtered);
+    //renderTable(filtered); // Always fill table with filtered data
+  }
+
+  function populateFilters(rows) {
+    const datasets = new Set(), auxFiles = new Set(), sources = new Set(), services = new Set();
+    rows.forEach(b => {
+      datasets.add(getId(b.dataset.value, "dataset."));
+      auxFiles.add(getId(b.aux.value, "aux."));
+      sources.add(getId(b.source.value, "source."));
+      if (b.service) services.add(getId(b.service.value, "service."));
+    });
+    
+    const fill = (id, values, isMultiple = false) => {
+      const select = document.getElementById(id);
+      if (!isMultiple) select.innerHTML = '<option>All</option>';
+      [...values].sort().forEach(v => {
+        const opt = document.createElement("option");
+        opt.value = v;
+        opt.textContent = v.split(".")[1];
+        select.appendChild(opt);
+      });
+    };
+    
+    fill("datasetFilter", datasets);
+    fill("auxFilter", auxFiles);
+    fill("sourceFilter", sources);
+    
+    // Populate custom service dropdown
+    const serviceDropdown = document.getElementById("serviceDropdownContent");
+    const clearAllDiv = serviceDropdown.querySelector('.clear-all');
+    
+    // Clear existing items except clear all button
+    serviceDropdown.innerHTML = '<div class="clear-all" id="clearAllServices">Clear All</div>';
+    
+    [...services].sort().forEach(serviceId => {
+      const item = document.createElement("div");
+      item.className = "dropdown-item";
+      
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.value = serviceId;
+      checkbox.id = `service-${serviceId}`;
+      
+      const label = document.createElement("label");
+      label.htmlFor = checkbox.id;
+      label.textContent = serviceId.split(".")[1];
+      
+      item.appendChild(checkbox);
+      item.appendChild(label);
+      serviceDropdown.appendChild(item);
+      
+      // Add change event listener to checkbox
+      checkbox.addEventListener('change', function() {
+        updateServiceDropdownText();
+        applyFilters();
+      });
+      
+      // Add click event to item
+      item.addEventListener('click', function(e) {
+        if (e.target.type !== 'checkbox') {
+          checkbox.checked = !checkbox.checked;
+          updateServiceDropdownText();
+          applyFilters();
+        }
+      });
+    });
+    
+    // Add clear all functionality
+    document.getElementById('clearAllServices').addEventListener('click', function() {
+      document.querySelectorAll('#serviceDropdownContent input[type="checkbox"]').forEach(cb => {
+        cb.checked = false;
+      });
+      updateServiceDropdownText();
+      applyFilters();
+    });
+  }
+  
+  function updateServiceDropdownText() {
+    const selected = Array.from(document.querySelectorAll('#serviceDropdownContent input[type="checkbox"]:checked'));
+    const text = document.getElementById('serviceDropdownText');
+    
+    if (selected.length === 0) {
+      text.textContent = 'Select Services';
+    } else if (selected.length === 1) {
+      text.textContent = selected[0].nextElementSibling.textContent;
+    } else {
+      text.textContent = `${selected.length} services selected`;
+    }
+  }
+  
+  // Add dropdown toggle functionality
+  document.getElementById('serviceDropdownHeader').addEventListener('click', function() {
+    const content = document.getElementById('serviceDropdownContent');
+    const header = document.getElementById('serviceDropdownHeader');
+    
+    content.classList.toggle('show');
+    header.classList.toggle('open');
+  });
+  
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(e) {
+    const dropdown = document.querySelector('.custom-dropdown');
+    if (!dropdown.contains(e.target)) {
+      document.getElementById('serviceDropdownContent').classList.remove('show');
+      document.getElementById('serviceDropdownHeader').classList.remove('open');
+    }
+  });
+
+  function renderGraph(data) {
+    const svg = d3.select("svg");
+    svg.selectAll("*").remove();
+
+    // Get the actual size of the graph container
+    const container = document.querySelector('.graph-container');
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+
+    // Set SVG size to match container
+    svg.attr("width", width).attr("height", height);
+
+    const radius = Math.min(width, height) / 2 - 100;
+
+    // Create main container group
+    const containerG = svg.append("g");
+    const g = containerG.append("g").attr("transform", `translate(${width / 2},${height / 2})`);
+    
+    // Add zoom behavior
+    const zoom = d3.zoom()
+      .scaleExtent([0.1, 10])
+      .on("zoom", function(event) {
+        containerG.attr("transform", event.transform);
+      });
+    
+    svg.call(zoom);
+    
+    // Add zoom controls
+    const zoomControls = d3.select("body").select(".zoom-controls");
+    if (zoomControls.empty()) {
+      const controls = d3.select("body").append("div")
+        .attr("class", "zoom-controls")
+        .style("position", "absolute")
+        .style("bottom", "20px")
+        .style("right", "20px")
+        .style("background", "rgba(255,255,255,0.9)")
+        .style("padding", "10px")
+        .style("border-radius", "5px")
+        .style("box-shadow", "0 2px 5px rgba(0,0,0,0.2)");
+      
+      controls.append("button")
+        .text("Zoom In")
+        .style("margin", "2px")
+        .style("padding", "5px 10px")
+        .style("cursor", "pointer")
+        .on("click", function() {
+          svg.transition().duration(300).call(zoom.scaleBy, 1.5);
+        });
+      
+      controls.append("button")
+        .text("Zoom Out")
+        .style("margin", "2px")
+        .style("padding", "5px 10px")
+        .style("cursor", "pointer")
+        .on("click", function() {
+          svg.transition().duration(300).call(zoom.scaleBy, 1 / 1.5);
+        });
+      
+      controls.append("button")
+        .text("Reset")
+        .style("margin", "2px")
+        .style("padding", "5px 10px")
+        .style("cursor", "pointer")
+        .on("click", function() {
+          svg.transition().duration(500).call(zoom.transform, d3.zoomIdentity);
+        });
+    }
+
+    const nodes = new Map();
+    const links = [];
+    const addNode = (id, label, type) => {
+      if (!nodes.has(id)) {
+        nodes.set(id, { id, name: label, type });
+      }
+    };
+
+    data.forEach(b => {
+      const dId = getId(b.dataset.value, "dataset.");
+      const aId = getId(b.aux.value, "aux.");
+      const sId = getId(b.source.value, "source.");
+
+      addNode(dId, dId.split(".")[1], "dataset");
+      addNode(aId, aId.split(".")[1], "auxfile");
+      addNode(sId, sId.split(".")[1], "source");
+
+      // Add service node and link if service exists
+      if (b.service) {
+        const servId = getId(b.service.value, "service.");
+        addNode(servId, servId.split(".")[1], "service");
+        links.push({ source: servId, target: dId, type: "service-dataset" });
+      }
+
+      links.push({ source: dId, target: aId, type: "dataset-auxfile" });
+      links.push({ source: aId, target: sId, type: "auxfile-source" });
+    });
+
+    const nodeList = Array.from(nodes.values());
+    
+    // Group nodes by type for better positioning
+    const nodesByType = {
+      service: nodeList.filter(d => d.type === "service"),
+      dataset: nodeList.filter(d => d.type === "dataset"),
+      auxfile: nodeList.filter(d => d.type === "auxfile"),
+      source: nodeList.filter(d => d.type === "source")
+    };
+
+    // Arrange nodes in layers/sectors
+    const typeOrder = ["service", "dataset", "auxfile", "source"];
+    let currentAngle = 0;
+    const angleStep = (2 * Math.PI) / nodeList.length;
+    
+    typeOrder.forEach(type => {
+      const nodesOfType = nodesByType[type];
+      if (nodesOfType.length === 0) return;
+      
+      nodesOfType.forEach((node, i) => {
+        const angle = currentAngle + (i * angleStep);
+        node.angle = angle;
+        node.x = Math.cos(angle - Math.PI / 2) * radius;
+        node.y = Math.sin(angle - Math.PI / 2) * radius;
+      });
+      
+      currentAngle += nodesOfType.length * angleStep;
+    });
+
+    const line = d3.line().curve(d3.curveBundle.beta(0.85)).x(d => d.x).y(d => d.y);
+
+    const pathData = links.map(link => {
+      const src = nodes.get(link.source);
+      const tgt = nodes.get(link.target);
+      const mid1 = {
+        x: Math.cos((src.angle + tgt.angle) / 2 - Math.PI / 2) * radius * 0.75,
+        y: Math.sin((src.angle + tgt.angle) / 2 - Math.PI / 2) * radius * 0.75
+      };
+      const mid2 = {
+        x: Math.cos((src.angle + tgt.angle) / 2 - Math.PI / 2) * radius * 0.5,
+        y: Math.sin((src.angle + tgt.angle) / 2 - Math.PI / 2) * radius * 0.5
+      };
+      return {
+        path: [src, mid2, mid1, tgt],
+        type: link.type,
+        source: src,
+        target: tgt
+      };
+    });
+
+    // Define color mapping for different relationship types
+    const colorMap = {
+      "service-dataset": "#ff6b35",   // Orange-red
+      "dataset-auxfile": "#2e8b57",  // Forest Green
+      "auxfile-source": "#4169e1"    // Royal Blue
+    };
+
+    const tooltip = d3.select("#tooltip");
+
+    // Create the path elements - all gray by default
+    const paths = g.selectAll("path")
+      .data(pathData)
+      .join("path")
+      .attr("d", d => line(d.path))
+      .attr("class", "link")
+      .on("mouseover", function(event, d) {
+        // Show tooltip for edge hover
+        tooltip.style("display", "block")
+               .style("left", event.pageX + 10 + "px")
+               .style("top", event.pageY + 10 + "px")
+               .html(`<strong>${d.type.replace('-', ' → ')}</strong><br>${d.source.name} → ${d.target.name}`);
+        
+        // Highlight this edge and dim others
+        paths.classed("dimmed", true);
+        d3.select(this).classed("dimmed", false).classed("highlight", true)
+          .style("stroke", colorMap[d.type] || "#999");
+
+        // Find the corresponding data row(s) and update the table
+        let highlightedRows = [];
+        if (d.type === "service-dataset") {
+          highlightedRows = data.filter(b =>
+            b.service && b.service.value.split('/').pop() === d.source.name &&
+            b.dataset.value.split('/').pop() === d.target.name
+          );
+        } else if (d.type === "dataset-auxfile") {
+          highlightedRows = data.filter(b =>
+            b.dataset.value.split('/').pop() === d.source.name &&
+            b.aux.value.split('/').pop() === d.target.name
+          );
+        } else if (d.type === "auxfile-source") {
+          highlightedRows = data.filter(b =>
+            b.aux.value.split('/').pop() === d.source.name &&
+            b.source.value.split('/').pop() === d.target.name
+          );
+        }
+        renderHighlightedTable(highlightedRows);
+      })
+      .on("mouseout", function() {
+        tooltip.style("display", "none");
+        // Reset all paths to default state
+        paths.classed("dimmed", false).classed("highlight", false)
+          .style("stroke", null);
+        // renderTable(data); // Restore full table on mouseout
+      });
+
+    // Add node labels with different styles for different types
+    const labels = g.selectAll("text")
+      .data(nodeList)
+      .join("text")
+      .attr("transform", d => `translate(${d.x},${d.y}) rotate(${(d.angle * 180 / Math.PI - 90) + (d.angle > Math.PI ? 180 : 0)})`)
+      .attr("text-anchor", d => d.angle > Math.PI ? "end" : "start")
+      .attr("alignment-baseline", "middle")
+      .text(d => d.name)
+      .style("font-size", "11px")
+      .style("cursor", "pointer")
+      .style("font-weight", d => d.type === "service" ? "bold" : "normal")
+      .style("fill", d => {
+        switch(d.type) {
+          case "service": return "#ff6b35";
+          case "dataset": return "#2e8b57";
+          case "auxfile": return "#4169e1";
+          case "source": return "#333";
+          default: return "#333";
+        }
+      })
+      .on("mouseover", function(event, d) {
+        d3.select(this).classed("highlight-label", true);
+
+        // Find all paths connected to this node
+        const connectedPaths = paths.filter(function() {
+          const pathD = d3.select(this).datum();
+          return pathD.source.id === d.id || pathD.target.id === d.id;
+        });
+
+        // Dim all paths, then highlight and color the connected ones
+        paths.classed("dimmed", true);
+        connectedPaths.each(function() {
+          const pathD = d3.select(this).datum();
+          d3.select(this)
+            .classed("dimmed", false)
+            .classed("highlight", true)
+            .style("stroke", colorMap[pathD.type] || "#999");
+        });
+
+        // --- ADD THIS: Show only related rows in the table ---
+        let highlightedRows = [];
+        if (d.type === "service") {
+          highlightedRows = data.filter(b => b.service && b.service.value.split('#').pop() === d.name);
+        } else if (d.type === "dataset") {
+          highlightedRows = data.filter(b => b.dataset.value.split('#').pop() === d.name);
+        } else if (d.type === "auxfile") {
+          highlightedRows = data.filter(b => b.aux.value.split('#').pop() === d.name);
+        } else if (d.type === "source") {
+          highlightedRows = data.filter(b => b.source.value.split('#').pop() === d.name);
+        }
+        renderHighlightedTable(highlightedRows);
+      })
+      .on("mouseout", function(event, d) {
+        d3.select(this).classed("highlight-label", false);
+        // Reset all paths to default state
+        paths.classed("dimmed", false).classed("highlight", false)
+          .style("stroke", null);
+        // renderTable(data); // Restore full table on mouseout
+      });
+  }
+
+  populateFilters(allRows);
+  applyFilters();
+
+  document.getElementById("datasetFilter").onchange = applyFilters;
+  document.getElementById("auxFilter").onchange = applyFilters;
+  document.getElementById("sourceFilter").onchange = applyFilters;
+})();
+</script>
+</body>
